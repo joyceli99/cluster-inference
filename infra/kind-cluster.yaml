@@ -1,0 +1,18 @@
+# Local multi-node cluster via kind (Kubernetes-in-Docker).
+# Each "node" below is a Docker container acting as a k8s node -- real
+# scheduling behavior, fixed local capacity, no cloud account needed.
+#
+# Create with:
+#   kind create cluster --name cluster-inference-radar --config infra/kind-cluster.yaml
+#
+# Then point kubectl at it (kind does this automatically, but to confirm):
+#   kubectl cluster-info --context kind-cluster-inference-radar
+#   kubectl get nodes -o wide
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: cluster-inference-radar
+nodes:
+  - role: control-plane
+  - role: worker
+  - role: worker
+  - role: worker
