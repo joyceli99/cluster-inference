@@ -37,7 +37,7 @@ cluster-inference/
 ├── controller/      # job dispatcher, aggregator (planned)
 ├── radar/           # cluster poller, FastAPI backend, React frontend (planned)
 ├── SPEC.md          # full design spec, milestones, and roadmap
-└── DAY1.md          # build log
+└── STATUS.md        # build status
 ```
 
 ## Tech stack
@@ -62,4 +62,4 @@ kubectl get nodes
 ```
 
 See [SPEC.md](SPEC.md) for the full design, phased approach, and definition of done, and
-[DAY1.md](DAY1.md) for current build status.
+[STATUS.md](STATUS.md) for current build status.

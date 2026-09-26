@@ -1,8 +1,8 @@
-# Day 1 — Milestones 1 & 2
+# Build Status
 
-## What's done
+## Completed
 
-**Milestone 2 (worker ML logic, no k8s yet)** — built and smoke-tested:
+**Milestone 2 (inference worker logic, no k8s yet)** — built and smoke-tested:
 
 - `inference/shard_loader.py` — deterministic dataset sharding (`ShardConfig` +
   `load_shard`). Validated with a synthetic 97-example dataset split into 1
@@ -23,7 +23,7 @@ your machine, which this sandbox doesn't have):
 
 - `infra/kind-cluster.yaml` — 4-node cluster (1 control-plane + 3 workers).
 
-## Run this on your machine next
+## Validate locally
 
 ```bash
 # 1. Sanity-check the ML path for real (needs your network access to HF Hub)
@@ -51,9 +51,9 @@ docker run --rm \
 
 If step 1 and step 4 both produce a result JSON with a real
 `examples_per_second`, Milestone 2 is fully validated end to end and
-Milestone 1's cluster is up — that's Day 1 done.
+Milestone 1's cluster is up.
 
-## Next up (Day 2 → Milestone 3)
+## Next: Milestone 3
 
 The job dispatcher: use the `kubernetes` Python client to create a k8s `Job`
 with `parallelism: N`, one pod per shard, `SHARD_INDEX` injected per-pod.
