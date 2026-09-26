@@ -98,6 +98,21 @@ flowchart TB
   visualization tool, not a shipped product. Time goes into making the graph reflect real state
   correctly, not into UI polish.
 
+## Future work — Phase 3: reusable radar package
+
+Once Phase 1 and Phase 2 work end-to-end against this project's own workload, generalize the
+radar (poller + backend + frontend) into a standalone installable package (e.g. `pip install
+cluster-radar`) that anyone can point at their own Kubernetes cluster/namespace to visualize
+their own workload — not just this project's dispatcher. This means:
+
+- A configurable label selector / namespace instead of assumptions tied to this project's Job.
+- Dropping the hard dependency on Postgres/throughput-stats schema specific to this demo.
+- A CLI entry point (e.g. `cluster-radar watch --namespace foo`) that reads the user's kubeconfig
+  and serves the graph without any setup beyond `pip install`.
+
+Explicitly not part of Phase 2 — this is deferred until the radar has proven itself on the
+Phase 1 workload first.
+
 ## Definition of done (for this spec)
 
 - A `kind` cluster running locally with no manual pod creation — the dispatcher creates
