@@ -32,7 +32,7 @@ The project has two parts:
 
 ```
 cluster-inference/
-├── worker/          # containerized inference worker (shard loading + CPU inference)
+├── inference/       # containerized inference worker (shard loading + CPU inference)
 ├── infra/           # kind cluster config, k8s manifests
 ├── controller/      # job dispatcher, aggregator (planned)
 ├── radar/           # cluster poller, FastAPI backend, React frontend (planned)
@@ -51,8 +51,8 @@ cluster-inference/
 ## Getting started
 
 ```bash
-# Run the worker locally
-cd worker
+# Run the inference worker locally
+cd inference
 pip install -r requirements.txt
 DATASET_NAME=ag_news SHARD_INDEX=0 SHARD_COUNT=4 python3 infer.py
 

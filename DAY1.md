@@ -4,17 +4,17 @@
 
 **Milestone 2 (worker ML logic, no k8s yet)** — built and smoke-tested:
 
-- `worker/shard_loader.py` — deterministic dataset sharding (`ShardConfig` +
+- `inference/shard_loader.py` — deterministic dataset sharding (`ShardConfig` +
   `load_shard`). Validated with a synthetic 97-example dataset split into 1
   and 4 shards: every example accounted for exactly once, no drops or
   duplicates, and out-of-range `shard_index` raises cleanly.
   (Couldn't hit the real HF Hub from this sandbox — no network egress to
   `huggingface.co` here — so the sharding *math* is proven, but you'll want
   to re-run the real thing once on your machine, see below.)
-- `worker/infer.py` — loads `sentence-transformers/all-MiniLM-L6-v2` on CPU,
+- `inference/infer.py` — loads `sentence-transformers/all-MiniLM-L6-v2` on CPU,
   embeds a shard, writes per-shard JSON with timing + throughput
   (`examples_per_second`) and a few sample embedding previews.
-- `worker/requirements.txt`, `worker/Dockerfile` — CPU-only image (no CUDA
+- `inference/requirements.txt`, `inference/Dockerfile` — CPU-only image (no CUDA
   base, no `device="cuda"` anywhere). Model is pre-downloaded at build time
   so N pods don't all cold-start-download from the Hub simultaneously.
 
@@ -27,7 +27,7 @@ your machine, which this sandbox doesn't have):
 
 ```bash
 # 1. Sanity-check the ML path for real (needs your network access to HF Hub)
-cd worker
+cd inference
 pip install -r requirements.txt
 DATASET_NAME=ag_news SHARD_INDEX=0 SHARD_COUNT=4 MAX_EXAMPLES=200 python3 infer.py
 
@@ -36,10 +36,10 @@ kind create cluster --name cluster-inference-radar --config ../infra/kind-cluste
 kubectl get nodes -o wide
 # You should see 1 control-plane + 3 worker nodes, all Ready.
 
-# 3. Build the worker image and load it into kind
+# 3. Build the inference image and load it into kind
 #    (kind clusters can't pull from a local Docker daemon directly — images
 #    have to be explicitly loaded into the cluster's node containers)
-docker build -t cluster-inference-worker:dev ./worker
+docker build -t cluster-inference-worker:dev ./inference
 kind load docker-image cluster-inference-worker:dev --name cluster-inference-radar
 
 # 4. Smoke-test the image standalone (still no k8s Job yet, just confirming
