@@ -1,0 +1,244 @@
+{
+  "cluster": "kind-cluster-inference-radar",
+  "timestamp": "2026-11-17T04:53:39+00:00",
+  "nodes": [
+    {
+      "id": "node/cluster-inference-radar-control-plane",
+      "type": "node",
+      "label": "cluster-inference-radar-control-plane",
+      "role": "control-plane",
+      "ready": true,
+      "cpu": {
+        "allocatable": 10.0,
+        "requested": 0.95,
+        "pct": 9.5
+      },
+      "memory": {
+        "allocatable": 8218034176.0,
+        "requested": 304087040.0,
+        "pct": 3.7
+      },
+      "utilization": 9.5,
+      "pod_count": 9
+    },
+    {
+      "id": "node/cluster-inference-radar-worker",
+      "type": "node",
+      "label": "cluster-inference-radar-worker",
+      "role": "worker",
+      "ready": true,
+      "cpu": {
+        "allocatable": 10.0,
+        "requested": 8.1,
+        "pct": 81.0
+      },
+      "memory": {
+        "allocatable": 8218034176.0,
+        "requested": 589299712.0,
+        "pct": 7.2
+      },
+      "utilization": 81.0,
+      "pod_count": 4
+    },
+    {
+      "id": "node/cluster-inference-radar-worker2",
+      "type": "node",
+      "label": "cluster-inference-radar-worker2",
+      "role": "worker",
+      "ready": true,
+      "cpu": {
+        "allocatable": 10.0,
+        "requested": 8.1,
+        "pct": 81.0
+      },
+      "memory": {
+        "allocatable": 8218034176.0,
+        "requested": 589299712.0,
+        "pct": 7.2
+      },
+      "utilization": 81.0,
+      "pod_count": 4
+    },
+    {
+      "id": "node/cluster-inference-radar-worker3",
+      "type": "node",
+      "label": "cluster-inference-radar-worker3",
+      "role": "worker",
+      "ready": true,
+      "cpu": {
+        "allocatable": 10.0,
+        "requested": 8.1,
+        "pct": 81.0
+      },
+      "memory": {
+        "allocatable": 8218034176.0,
+        "requested": 589299712.0,
+        "pct": 7.2
+      },
+      "utilization": 81.0,
+      "pod_count": 4
+    },
+    {
+      "id": "job/default/radar-demo",
+      "type": "job",
+      "label": "radar-demo",
+      "namespace": "default",
+      "parallelism": 8,
+      "completions": 8,
+      "active": 8,
+      "succeeded": 0,
+      "failed": 0
+    },
+    {
+      "id": "pod/default/radar-demo-6w2zb",
+      "type": "pod",
+      "label": "radar-demo-6w2zb",
+      "namespace": "default",
+      "status": "Running",
+      "reason": null,
+      "parent": "node/cluster-inference-radar-worker",
+      "cpu_request": 4.0,
+      "memory_request": 268435456.0
+    },
+    {
+      "id": "pod/default/radar-demo-9kcpk",
+      "type": "pod",
+      "label": "radar-demo-9kcpk",
+      "namespace": "default",
+      "status": "Running",
+      "reason": null,
+      "parent": "node/cluster-inference-radar-worker3",
+      "cpu_request": 4.0,
+      "memory_request": 268435456.0
+    },
+    {
+      "id": "pod/default/radar-demo-b4n4r",
+      "type": "pod",
+      "label": "radar-demo-b4n4r",
+      "namespace": "default",
+      "status": "Running",
+      "reason": null,
+      "parent": "node/cluster-inference-radar-worker",
+      "cpu_request": 4.0,
+      "memory_request": 268435456.0
+    },
+    {
+      "id": "pod/default/radar-demo-jbsmw",
+      "type": "pod",
+      "label": "radar-demo-jbsmw",
+      "namespace": "default",
+      "status": "Running",
+      "reason": null,
+      "parent": "node/cluster-inference-radar-worker3",
+      "cpu_request": 4.0,
+      "memory_request": 268435456.0
+    },
+    {
+      "id": "pod/default/radar-demo-kqvdv",
+      "type": "pod",
+      "label": "radar-demo-kqvdv",
+      "namespace": "default",
+      "status": "Running",
+      "reason": null,
+      "parent": "node/cluster-inference-radar-worker2",
+      "cpu_request": 4.0,
+      "memory_request": 268435456.0
+    },
+    {
+      "id": "pod/default/radar-demo-m9sv9",
+      "type": "pod",
+      "label": "radar-demo-m9sv9",
+      "namespace": "default",
+      "status": "Running",
+      "reason": null,
+      "parent": "node/cluster-inference-radar-worker2",
+      "cpu_request": 4.0,
+      "memory_request": 268435456.0
+    },
+    {
+      "id": "pod/default/radar-demo-qf9qr",
+      "type": "pod",
+      "label": "radar-demo-qf9qr",
+      "namespace": "default",
+      "status": "Pending",
+      "reason": "Unschedulable",
+      "parent": "node/<unscheduled>",
+      "cpu_request": 4.0,
+      "memory_request": 268435456.0
+    },
+    {
+      "id": "pod/default/radar-demo-w55rd",
+      "type": "pod",
+      "label": "radar-demo-w55rd",
+      "namespace": "default",
+      "status": "Pending",
+      "reason": "Unschedulable",
+      "parent": "node/<unscheduled>",
+      "cpu_request": 4.0,
+      "memory_request": 268435456.0
+    },
+    {
+      "id": "node/<unscheduled>",
+      "type": "node",
+      "label": "unscheduled",
+      "role": "unscheduled",
+      "ready": false,
+      "utilization": 0.0,
+      "pod_count": 2
+    }
+  ],
+  "edges": [
+    {
+      "id": "job/default/radar-demo->pod/default/radar-demo-6w2zb",
+      "source": "job/default/radar-demo",
+      "target": "pod/default/radar-demo-6w2zb",
+      "type": "owner"
+    },
+    {
+      "id": "job/default/radar-demo->pod/default/radar-demo-9kcpk",
+      "source": "job/default/radar-demo",
+      "target": "pod/default/radar-demo-9kcpk",
+      "type": "owner"
+    },
+    {
+      "id": "job/default/radar-demo->pod/default/radar-demo-b4n4r",
+      "source": "job/default/radar-demo",
+      "target": "pod/default/radar-demo-b4n4r",
+      "type": "owner"
+    },
+    {
+      "id": "job/default/radar-demo->pod/default/radar-demo-jbsmw",
+      "source": "job/default/radar-demo",
+      "target": "pod/default/radar-demo-jbsmw",
+      "type": "owner"
+    },
+    {
+      "id": "job/default/radar-demo->pod/default/radar-demo-kqvdv",
+      "source": "job/default/radar-demo",
+      "target": "pod/default/radar-demo-kqvdv",
+      "type": "owner"
+    },
+    {
+      "id": "job/default/radar-demo->pod/default/radar-demo-m9sv9",
+      "source": "job/default/radar-demo",
+      "target": "pod/default/radar-demo-m9sv9",
+      "type": "owner"
+    },
+    {
+      "id": "job/default/radar-demo->pod/default/radar-demo-qf9qr",
+      "source": "job/default/radar-demo",
+      "target": "pod/default/radar-demo-qf9qr",
+      "type": "owner"
+    },
+    {
+      "id": "job/default/radar-demo->pod/default/radar-demo-w55rd",
+      "source": "job/default/radar-demo",
+      "target": "pod/default/radar-demo-w55rd",
+      "type": "owner"
+    }
+  ],
+  "summary": {
+    "Running": 6,
+    "Pending": 2
+  }
+}
