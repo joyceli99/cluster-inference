@@ -18,10 +18,30 @@
   base, no `device="cuda"` anywhere). Model is pre-downloaded at build time
   so N pods don't all cold-start-download from the Hub simultaneously.
 
-**Milestone 1 (local cluster)** — scaffolded, not yet run (needs Docker on
-your machine, which this sandbox doesn't have):
+**Milestone 1 (local cluster)** — done and verified: the 4-node `kind` cluster
+(1 control-plane + 3 workers) is running with all nodes `Ready`.
 
-- `infra/kind-cluster.yaml` — 4-node cluster (1 control-plane + 3 workers).
+- `infra/kind-cluster.yaml` — the cluster definition.
+
+**Phase 2 — compute radar** — built ahead of Phase 1's dispatcher and verified
+against the live `kind` cluster, using a hand-written stand-in `Job` (8 pods
+requesting 4 CPU each, more than the workers can hold at once) as the workload:
+
+- `radar/backend/cluster_poller.py` — read-only poller; builds a graph snapshot
+  (nodes, pods, Jobs, ownership edges) and can run standalone as a console view.
+  Node utilization is requested / allocatable (kind has no metrics-server).
+- `radar/backend/main.py` — FastAPI app serving the cached snapshot at
+  `/api/graph`; a background task polls the Kubernetes API so the number of
+  viewers doesn't multiply API-server load.
+- `radar/frontend/graph_view/` — React + Cytoscape.js. Nodes colored by
+  utilization, pods nested inside their node and colored by status, Jobs linked
+  to their pods with animated edges for running pods, and a dashed "unscheduled"
+  bucket for pods the scheduler can't place yet. `?snapshot` loads a captured
+  real snapshot instead of polling.
+- `tests/` — 19 unit tests for the graph builder and the API (no cluster needed).
+
+Watching the stand-in Job: 6 pods ran and 2 sat `Pending` in the unscheduled
+bucket until capacity freed, then moved onto workers as the first pods finished.
 
 ## Validate locally
 
@@ -31,8 +51,8 @@ cd inference
 pip install -r requirements.txt
 DATASET_NAME=ag_news SHARD_INDEX=0 SHARD_COUNT=4 MAX_EXAMPLES=200 python3 infer.py
 
-# 2. Bring up the local cluster
-kind create cluster --name cluster-inference-radar --config ../infra/kind-cluster.yaml
+# 2. (Cluster is already up -- to recreate it:)
+#    kind create cluster --name cluster-inference-radar --config ../infra/kind-cluster.yaml
 kubectl get nodes -o wide
 # You should see 1 control-plane + 3 worker nodes, all Ready.
 
@@ -50,11 +70,15 @@ docker run --rm \
 ```
 
 If step 1 and step 4 both produce a result JSON with a real
-`examples_per_second`, Milestone 2 is fully validated end to end and
-Milestone 1's cluster is up.
+`examples_per_second`, Milestone 2 is fully validated end to end. This has
+not been done yet -- the inference worker has never run against the real
+dataset and model.
 
-## Next: Milestone 3
+## Next
 
-The job dispatcher: use the `kubernetes` Python client to create a k8s `Job`
-with `parallelism: N`, one pod per shard, `SHARD_INDEX` injected per-pod.
-This is `controller/job_dispatcher.py` — not started yet.
+- **Milestone 3, the job dispatcher**: use the `kubernetes` Python client to
+  create a k8s `Job` with `parallelism: N`, one pod per shard, `SHARD_INDEX`
+  injected per-pod. This is `controller/job_dispatcher.py` — not started yet.
+  The radar will pick its Jobs up automatically; the shard -> infer -> aggregate
+  DAG edges come once the aggregator exists.
+- Run the inference worker against the real dataset (Milestone 2 validation above).

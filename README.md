@@ -35,7 +35,8 @@ cluster-inference/
 ├── inference/       # containerized inference worker (shard loading + CPU inference)
 ├── infra/           # kind cluster config, k8s manifests
 ├── controller/      # job dispatcher, aggregator (planned)
-├── radar/           # cluster poller, FastAPI backend, React frontend (planned)
+├── radar/           # cluster poller, FastAPI backend, React graph frontend
+├── tests/           # unit tests for the radar backend
 ├── SPEC.md          # full design spec, milestones, and roadmap
 └── STATUS.md        # build status
 ```
@@ -60,6 +61,22 @@ DATASET_NAME=ag_news SHARD_INDEX=0 SHARD_COUNT=4 python3 infer.py
 kind create cluster --name cluster-inference-radar --config infra/kind-cluster.yaml
 kubectl get nodes
 ```
+
+### Run the radar
+
+Point `kubectl` at a cluster, then start the backend and the graph view:
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r radar/backend/requirements-dev.txt
+.venv/bin/python radar/backend/cluster_poller.py                       # console view of nodes/pods
+.venv/bin/uvicorn main:app --app-dir radar/backend --port 8000         # graph API
+(cd radar/frontend/graph_view && npm install && npm run dev)           # http://localhost:5173
+.venv/bin/python -m pytest                                             # tests
+```
+
+The radar is read-only and uses your current kubeconfig context (override with
+`RADAR_KUBE_CONTEXT`; limit namespaces with `RADAR_NAMESPACES=ns1,ns2`). Open
+`http://localhost:5173/?snapshot` to view a captured sample without a cluster.
 
 See [SPEC.md](SPEC.md) for the full design, phased approach, and definition of done, and
 [STATUS.md](STATUS.md) for current build status.
